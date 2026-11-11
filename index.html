@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c2230">
+<meta name="description" content="Wetter und Regenradar für Motorradfahrer">
+<title>Wetterradar</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <button class="search-trigger" id="searchOpen" aria-label="Stadt suchen">
+      <span class="ico">🔍</span><span id="placeName">Ort wählen…</span>
+    </button>
+    <button class="icon-btn" id="favToggle" aria-label="Als Favorit speichern" title="Favorit">☆</button>
+    <button class="icon-btn" id="refreshBtn" aria-label="Aktualisieren" title="Aktualisieren">⟳</button>
+  </header>
+
+  <main>
+    <!-- Wetter -->
+    <section class="view active" id="view-weather" aria-label="Wetter">
+      <div id="weatherEmpty" class="empty">
+        <p>Wo soll's hingehen?</p>
+        <button class="primary" id="emptySearch">Stadt suchen</button>
+        <button class="ghost" id="emptyLocate">📍 Mein Standort</button>
+      </div>
+      <div id="weatherContent" hidden>
+        <div class="hero">
+          <div class="hero-text">
+            <div class="now-temp" id="nowTemp">–°</div>
+            <div class="now-desc" id="nowDesc"></div>
+            <div class="now-meta" id="nowMeta"></div>
+            <div class="ride" id="rideToday"></div>
+          </div>
+          <figure class="hero-rider">
+            <div id="riderSvg"></div>
+            <figcaption id="riderLine"></figcaption>
+          </figure>
+        </div>
+
+        <h2 class="sec">Nächste 24 Stunden</h2>
+        <div class="hourly" id="hourly"></div>
+
+        <h2 class="sec">16 Tage</h2>
+        <div class="days" id="daysSure"></div>
+        <div class="uncertain-head" id="uncertainHead">
+          <strong>Ab Tag 8: nur Tendenz</strong>
+          <span>Die Wettermodelle laufen hier auseinander. Die Spanne zeigt, was 80 % von 82 Modellläufen (ECMWF + GFS Ensemble) erwarten. Je breiter, desto unsicherer.</span>
+        </div>
+        <div class="days uncertain" id="daysTrend"></div>
+        <p class="updated" id="updated"></p>
+      </div>
+    </section>
+
+    <!-- Favoriten -->
+    <section class="view" id="view-favs" aria-label="Favoriten">
+      <h2 class="sec">Favoriten</h2>
+      <p class="hint" id="favHint">Mit ☆ oben speicherst du den aktuellen Ort. Zum Sortieren am Griff ≡ ziehen oder die Pfeile nutzen.</p>
+      <ul class="favs" id="favList"></ul>
+    </section>
+
+    <!-- Radar -->
+    <section class="view" id="view-radar" aria-label="Regenradar">
+      <div id="map"></div>
+      <div class="radar-ctrl">
+        <button class="icon-btn" id="radarPlay" aria-label="Abspielen">▶</button>
+        <input type="range" id="radarSlider" min="0" max="0" value="0" aria-label="Zeitpunkt">
+        <div class="radar-time" id="radarTime">–</div>
+      </div>
+      <div class="radar-legend">
+        <span class="lg past">Gemessen</span><span class="lg fut">Vorhersage</span>
+        <span class="src" id="radarSrc"></span>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="Navigation">
+    <button class="tab active" data-view="weather"><span>🌤️</span>Wetter</button>
+    <button class="tab" data-view="favs"><span>⭐</span>Favoriten</button>
+    <button class="tab" data-view="radar"><span>🌧️</span>Radar</button>
+  </nav>
+
+  <!-- Suche -->
+  <div class="search-sheet" id="searchSheet" hidden>
+    <div class="search-bar">
+      <button class="icon-btn" id="searchClose" aria-label="Schließen">←</button>
+      <input id="searchInput" type="search" placeholder="Stadt oder Ort…" autocomplete="off" enterkeyhint="search">
+    </div>
+    <button class="locate" id="locateBtn">📍 Mein Standort</button>
+    <ul class="suggestions" id="suggestions" role="listbox"></ul>
+  </div>
+
+  <div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastAction"></button></div>
+</div>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="rider.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
