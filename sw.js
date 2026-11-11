@@ -1,6 +1,6 @@
 /* Service Worker: App-Hülle offline, Wetterdaten immer frisch aus dem Netz */
-const VERSION = 'wr-v2';
-const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'rider.js', 'manifest.webmanifest',
+const VERSION = 'wr-v3';
+const SHELL = ['./', 'index.html', 'styles.css?v=3', 'app.js?v=3', 'rider.js?v=3', 'manifest.webmanifest',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

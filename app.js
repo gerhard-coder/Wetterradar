@@ -540,6 +540,14 @@ const Radar = (() => {
     });
     slider.max = frames.length - 1;
     loadedAt = Date.now();
+    // Erst abspielen, wenn die Bilder geladen sind (max. 6 s warten)
+    label.textContent = 'Radar lädt…';
+    await new Promise((res) => {
+      let left = layers.length;
+      const done = () => { if (--left <= 0) res(); };
+      layers.forEach((l) => { l.once('load', done); });
+      setTimeout(res, 6000);
+    });
     $('#radarSrc').textContent = 'DWD RV-Produkt · 10-Min-Schritte';
     if (!inGermany(current)) {
       const div = document.createElement('div');
