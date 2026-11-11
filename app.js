@@ -107,8 +107,8 @@ const Search = (() => {
 
   function open() {
     sheet.hidden = false; input.value = ''; list.innerHTML = '';
+    input.focus(); // synchron im Klick, damit Android die Tastatur öffnet
     renderRecent();
-    setTimeout(() => input.focus(), 50);
     history.pushState({ search: 1 }, '');
   }
   function close(fromPop) {
@@ -553,7 +553,7 @@ const Radar = (() => {
   function setFrame(i) {
     if (!layers.length) return;
     idx = (i + layers.length) % layers.length;
-    layers.forEach((l, k) => l.setOpacity(k === idx ? 0.75 : 0));
+    layers.forEach((l, k) => l.setOpacity(k === idx ? 0.65 : 0));
     slider.value = idx;
     const f = frames[idx];
     const hm = f.t.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
